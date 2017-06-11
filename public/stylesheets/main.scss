@@ -1,10 +1,5 @@
-.welcome {
-  position: relative;
-  top: 150px;
-  text-align: center;
-  margin: 0 auto;
-}
+@import "base/animations";
+@import "base/forms";
+@import "base/paddings";
 
-h1 {
-  letter-spacing: 2px;
-}
+@import "module/loading";

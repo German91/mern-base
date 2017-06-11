@@ -13,6 +13,7 @@ const config = {
     port: 3000,
     contentBase: './dist',
     hot: true,
+    historyApiFallback: true,
   },
   module: {
     rules: [
@@ -31,8 +32,15 @@ const config = {
         test: /\.(sass|scss)$/,
         use: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
       },
+      {
+        test: /\.eot/,
+        use: 'url-loader?mimetype=application/vnd.ms-fontobject'
+      },
       // Compact files
-      { test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/, use: "file" }
+      {
+        test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$|\.woff2$/,
+        use: 'file-loader'
+      }
     ]
   },
   plugins: [
@@ -47,7 +55,8 @@ if (prod) {
   config.plugins.push(
     new webpack.DefinePlugin({
       'process.env': {
-          'NODE_ENV': `'production'`
+          'NODE_ENV': `'production'`,
+          'ROOT_URL': `''`,
       },
     }),
     new webpack.optimize.UglifyJsPlugin({
@@ -61,7 +70,8 @@ if (prod) {
   config.plugins.push(
     new webpack.DefinePlugin({
       'process.env': {
-          'NODE_ENV': `'development'`
+          'NODE_ENV': `'development'`,
+          'ROOT_URL': `'http://localhost:8000/api'`
       }
     })
   );

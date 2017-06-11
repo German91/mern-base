@@ -1,6 +1,13 @@
 import React from 'react';
 import { render } from 'react-dom';
+import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.css';
 
-import App from './components/App';
+import Routes from './routes';
 
-render(<App />, document.getElementById('app'));
+// Axios configuration
+axios.defaults.baseURL = process.env.ROOT_URL;
+axios.defaults.headers.common['Authorization'] = '';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
+
+render(Routes, document.getElementById('app'));
