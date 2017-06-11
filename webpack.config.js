@@ -10,6 +10,7 @@ const config = {
     filename: 'bundle.js',
   },
   devServer: {
+    port: 3000,
     contentBase: './dist',
     hot: true,
   },
@@ -29,7 +30,9 @@ const config = {
       { // sass / scss loader for webpack
         test: /\.(sass|scss)$/,
         use: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
-      }
+      },
+      // Compact files
+      { test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/, use: "file" }
     ]
   },
   plugins: [
@@ -39,6 +42,7 @@ const config = {
   ]
 };
 
+// Production
 if (prod) {
   config.plugins.push(
     new webpack.DefinePlugin({
@@ -52,6 +56,7 @@ if (prod) {
       }
     })
   );
+// Development
 } else {
   config.plugins.push(
     new webpack.DefinePlugin({
