@@ -53,6 +53,10 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '/dist/index.html'));
 });
 
+app.use('/api/test', (req, res, next) => {
+  res.status(200).json({ message: 'Hello Express' });
+});
+
 app.listen(PORT, (err) => {
   if (err) {
       console.error(err);
