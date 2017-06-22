@@ -13,7 +13,7 @@ class Welcome extends Component {
     return (
       <div className="welcome">
         <h1>{ this.state.title }</h1>
-        <p>{ env }</p>
+        <p>Environment: { env }</p>
       </div>
     );
   }
