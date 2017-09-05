@@ -1,14 +1,15 @@
+'use strict';
+
 const nodemailer = require('nodemailer');
-const config = require('config');
 const hbs = require('nodemailer-express-handlebars');
 
 const transporter = nodemailer.createTransport({
-    host: config.HOST,
-    port: config.PORT,
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
     secure: false,
     auth: {
-      user: config.EMAIL_USER,
-      pass: config.EMAIL_PASS
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
     }
 });
 

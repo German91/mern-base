@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
@@ -10,6 +12,8 @@ const compression = require('compression');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
+
+require('dotenv').config();
 
 // Database
 require('./database');
@@ -53,9 +57,8 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '/dist/index.html'));
 });
 
-app.use('/api/test', (req, res, next) => {
-  res.status(200).json({ message: 'Hello Express' });
-});
+// API Routes
+require('./app/routes')(app);
 
 app.listen(PORT, (err) => {
   if (err) {
@@ -64,3 +67,5 @@ app.listen(PORT, (err) => {
     console.info("==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.", PORT, PORT);
   }
 });
+
+module.exports = app;
