@@ -1,9 +1,10 @@
 'use strict';
 
-const nodemailer = require('nodemailer');
-const hbs = require('nodemailer-express-handlebars');
+const Nodemailer = require('nodemailer');
+const path = require('path');
+const EmailTemplate = require('email-templates').EmailTemplate;
 
-const transporter = nodemailer.createTransport({
+const transporter = Nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
     secure: false,
@@ -13,33 +14,24 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const options = {
-  viewEngine: {
-    extname: '.hbs',
-    layoutsDir: 'views/email/',
-    defaultLayout : 'base',
-    partialsDir : 'views/partials/'
-  },
-    viewPath: 'views/email/',
-    extName: '.hbs'
- };
-
-transporter.use('compile', hbs(options));
-
 /**
- * Send email
- * @param  {String}  from       Email
- * @param  {[type]}  to         recipies
- * @param  {[type]}  subject    Email subject
- * @param  {[type]}  template   Html template
- * @param  {[type]}  ctx        data
+ * Rende a template and send an email
+ * @param  {Object}   user          User's email and data to send
+ * @param  {String}   subject       Email subject
+ * @param  {String}   templateName  Templane to render
+ * @param  {Function} callback      Callback
+ * @return {Response}
  */
-exports.sendEmail = async (from, to, subject, template, ctx) => {
-  const mail = { from, to, subject, template, ctx };
+exports.sendMail = async (user, subject, templateName) => {
+  const templatesDir = path.resolve(__dirname, '..', 'templates');
+  const template = new EmailTemplate(path.join(templatesDir, templateName));
 
   try {
-    await transporter.sendMail(mail);
-  } catch (e) {
-    return e;
+    let results = await template.render(user);
+    let response = transporter.sendMail({ from: process.env.EMAIL_USER, to: user.email, subject, html: results.html });
+
+    return response.message;
+  } catch (err) {
+    return err;
   }
 };
