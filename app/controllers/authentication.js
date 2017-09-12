@@ -122,6 +122,20 @@ exports.resetPassword = async (req, res, next) => {
 };
 
 /**
+ * Get current user profile
+ * @return {Object}  User profile
+ */
+exports.profile = async (req, res, next) => {
+  try {
+    let user = await User.findById(req.user._id);
+
+    res.status(200).send({ code: 200, status: 'success', user });
+  } catch (err) {
+    res.status(400).send({ code: 400, status: 'error', message: err });
+  }
+};
+
+/**
  * Logout User
  * @return {Response}
  */
